@@ -11,3 +11,6 @@ You may want to change [localIP := "127.0.0.1" // it's used for the client's IP]
 If a test contains more than one client, then you may quickly run a.go, b.go, c.go in order(e.g. first run a.go, then run b.go as soon as possible).
 
 If you see "please disconnect", then you may shut down the server to simulate client disconnect with server.
+
+Test example:
+![example](https://github.com/yxie233/graphStore/blob/master/example_for_test_DFS/multiple_reader_mult_wrt_test.JPG)
