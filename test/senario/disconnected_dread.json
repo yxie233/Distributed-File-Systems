@@ -1,0 +1,80 @@
+{
+    "points": 5,
+    "clients": [
+        {
+            "name": "A",
+            "dfs_bind": "%%LOCAL_IP%%",
+            "local_path": "/tmp/clientA/",
+            "rpc_bind": "%%LOCAL_IP%%:1234"
+        }
+    ],
+    "name": "DISCONNECTED -- Client writes file, disconnects; can use DREAD while disconnected",
+    "rpc_bind": "%%LOCAL_IP%%:8484",
+    "operations": [
+        {
+            "target": "A",
+            "operation": "MountDFS"
+        },
+        {
+            "target": "A",
+            "operation": "Open",
+            "options": {
+                "file_descriptor": "fd",
+                "mode": "WRITE",
+                "name": "thefile"
+            }
+        },
+        {
+            "target": "A",
+            "operation": "Write",
+            "options": {
+                "chunk": "3",
+                "write_string": "Hello from CPSC 416!",
+                "file_descriptor": "fd"
+            }
+        },
+        {
+            "target": "A",
+            "operation": "Close",
+            "options":{
+                "file_descriptor": "fd"
+            }
+        },
+        {
+            "target": "A",
+            "operation": "Disconnect"
+        },
+        {
+            "target": "A",
+            "operation": "Open",
+            "options":{
+                "file_descriptor": "fd",
+                "mode": "DREAD",
+                "name": "thefile"
+            }
+        },
+        {
+            "target": "A",
+            "operation": "Read",
+            "options": {
+                "chunk": "3",
+                "expect_string": "Hello from CPSC 416!",
+                "file_descriptor": "fd"
+            }
+        },
+        {
+            "target": "A",
+            "operation": "Close",
+            "options": {
+                "file_descriptor": "fd"
+            }
+        },
+        {
+            "target": "A",
+            "operation": "UMountDFS",
+            "options": {
+              "expect_error": "DisconnectedError"
+            }
+        }
+    ]
+}

@@ -1,0 +1,185 @@
+{
+    "points": 10,
+    "clients": [
+        {
+            "dfs_bind": "%%LOCAL_IP%%",
+            "local_path": "/tmp/clientA/",
+            "name": "A",
+            "rpc_bind": "%%LOCAL_IP%%:1234"
+        },
+        {
+            "dfs_bind": "%%LOCAL_IP%%",
+            "local_path": "/tmp/clientB/",
+            "name": "B",
+            "rpc_bind": "%%LOCAL_IP%%:1235"
+        },
+        {
+            "dfs_bind": "%%LOCAL_IP%%",
+            "local_path": "/tmp/clientC/",
+            "name": "C",
+            "rpc_bind": "%%LOCAL_IP%%:1236"
+        }
+    ],
+    "name": "CONNECTED -- Three Clients Read And Write File",
+    "rpc_bind": "%%LOCAL_IP%%:8484",
+    "operations": [
+        {
+            "operation": "MountDFS",
+            "target": "A"
+        },
+        {
+            "operation": "MountDFS",
+            "target": "B"
+        },
+        {
+            "operation": "MountDFS",
+            "target": "C"
+        },
+        {
+            "operation": "Open",
+            "options": {
+                "file_descriptor": "fd",
+                "mode": "WRITE",
+                "name": "thefile"
+            },
+            "target": "A"
+        },
+        {
+            "operation": "Open",
+            "options": {
+                "file_descriptor": "fd",
+                "mode": "READ",
+                "name": "thefile"
+            },
+            "target": "B"
+        },
+        {
+            "operation": "Open",
+            "options": {
+                "file_descriptor": "fd",
+                "mode": "READ",
+                "name": "thefile"
+            },
+            "target": "C"
+        },
+        {
+            "operation": "Write",
+            "options": {
+                "chunk": "3",
+                "file_descriptor": "fd",
+                "write_string": "Hello from CPSC 416!"
+            },
+            "target": "A"
+        },
+        {
+            "operation": "Read",
+            "options": {
+                "chunk": "3",
+                "expect_string": "Hello from CPSC 416!",
+                "file_descriptor": "fd"
+            },
+            "target": "B"
+        },
+        {
+            "operation": "Read",
+            "options": {
+                "chunk": "3",
+                "expect_string": "Hello from CPSC 416!",
+                "file_descriptor": "fd"
+            },
+            "target": "C"
+        },
+        {
+            "operation": "Close",
+            "options": {
+                "file_descriptor": "fd"
+            },
+            "target": "A"
+        },
+        {
+            "operation": "Close",
+            "options": {
+                "file_descriptor": "fd"
+            },
+            "target": "B"
+        },
+        {
+            "operation": "Open",
+            "options": {
+                "file_descriptor": "fd",
+                "mode": "WRITE",
+                "name": "thefile"
+            },
+            "target": "B"
+        },
+        {
+            "operation": "Write",
+            "options": {
+                "chunk": "3",
+                "file_descriptor": "fd",
+                "write_string": "Not a Hello anymore"
+            },
+            "target": "B"
+        },
+        {
+            "operation": "Open",
+            "options": {
+                "file_descriptor": "fd",
+                "mode": "READ",
+                "name": "thefile"
+            },
+            "target": "A"
+        },
+        {
+            "operation": "Read",
+            "options": {
+                "chunk": "3",
+                "expect_string": "Not a Hello anymore",
+                "file_descriptor": "fd"
+            },
+            "target": "A"
+        },
+        {
+            "operation": "Read",
+            "options": {
+                "chunk": "3",
+                "expect_string": "Not a Hello anymore",
+                "file_descriptor": "fd"
+            },
+            "target": "C"
+        },
+        {
+            "operation": "Close",
+            "options": {
+                "file_descriptor": "fd"
+            },
+            "target": "A"
+        },
+        {
+            "operation": "Close",
+            "options": {
+                "file_descriptor": "fd"
+            },
+            "target": "B"
+        },
+        {
+            "operation": "Close",
+            "options": {
+                "file_descriptor": "fd"
+            },
+            "target": "C"
+        },
+        {
+            "operation": "UMountDFS",
+            "target": "A"
+        },
+        {
+            "operation": "UMountDFS",
+            "target": "B"
+        },
+        {
+            "operation": "UMountDFS",
+            "target": "C"
+        }
+    ]
+}

@@ -1,0 +1,64 @@
+{
+  "points": 5,
+  "name": "CONNECTED -- Two Clients Open Same File for Writing",
+  "rpc_bind": "%%LOCAL_IP%%:8484",
+
+  "clients": [
+    {
+      "name": "A",
+      "local_path": "/tmp/clientA/",
+      "rpc_bind": "%%LOCAL_IP%%:1234",
+      "dfs_bind": "%%LOCAL_IP%%"
+    },
+    {
+      "name": "B",
+      "local_path": "/tmp/clientB/",
+      "rpc_bind": "%%LOCAL_IP%%:4321",
+      "dfs_bind": "%%LOCAL_IP%%"
+    }
+  ],
+
+  "operations": [
+    {
+      "target": "A",
+      "operation": "MountDFS"
+    },
+    {
+      "target": "B",
+      "operation": "MountDFS"
+    },
+    {
+      "target": "A",
+      "operation": "Open",
+      "options": {
+        "name": "thefile",
+        "mode": "WRITE",
+        "file_descriptor": "fd"
+      }
+    },
+    {
+      "target": "B",
+      "operation": "Open",
+      "options": {
+        "name": "thefile",
+        "mode": "WRITE",
+        "expect_error": "OpenWriteConflictError"
+      }
+    },
+    {
+      "target": "A",
+      "operation": "Close",
+      "options": {
+        "file_descriptor": "fd"
+      }
+    },
+    {
+      "target": "A",
+      "operation": "UMountDFS"
+    },
+    {
+      "target": "B",
+      "operation": "UMountDFS"
+    }
+  ]
+}
