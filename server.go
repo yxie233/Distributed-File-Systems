@@ -120,7 +120,7 @@ func monitor(cid int, heartBeatInterval time.Duration) {
 		records.Lock()
 
 		if time.Now().UnixNano()-records.knownClients[cid].RecentHeartbeat > int64(heartBeatInterval) {
-			fmt.Println("client timed out: ", records.knownClients[cid].LocalIP)
+			fmt.Println("client", cid, "timed out: ", records.knownClients[cid].LocalIP)
 			clt := records.knownClients[cid]
 			clt.Online = false
 			records.knownClients[cid] = clt
@@ -157,6 +157,8 @@ func (t *MyServer) ReleaseAll(cid *int, reply *bool) error {
 }
 
 func (t *MyServer) GlobalFileExists(fname *string, reply *bool) error {
+	records.RLock()
+	defer records.RUnlock()
 	*reply = records.globalFileExistTable[*fname]
 	return nil
 }

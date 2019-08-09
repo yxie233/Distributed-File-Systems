@@ -1,4 +1,4 @@
-The tests are work according senarios in the test\senario fold. 
+The tests are work according senarios in the test\scenario fold. 
 
 How to run:  
 1.first run the server(e.g. go run .\server.go 127.0.0.1:9999).  
