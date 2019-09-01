@@ -20,7 +20,7 @@
 package main
 
 import (
-	"./dfslib"
+	"../dfslib"
 
 	"fmt"
 	"io/ioutil"
